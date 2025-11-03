@@ -1,4 +1,5 @@
 import os
+from session import create_session
 from dotenv import load_dotenv
 
 load_dotenv()
