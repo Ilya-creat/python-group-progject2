@@ -35,6 +35,7 @@ def parsing_from_api():
 
             if not odds_data:
                 logger.debug(f"Нет данных для {sport_title}")
+                return
 
             logger.debug(f"Найдено событий: {len(odds_data)}")
 
