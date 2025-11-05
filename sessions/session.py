@@ -54,7 +54,7 @@ def create_session(base_url: str,
             kw_params.update(params)
             kwargs["params"] = kw_params
 
-        logger.debug(f"Request ({method.upper()}): {url} - {kwargs}")
+        logger.debug(f"Request ({method.upper()}) - {url} - {kwargs}")
         res = session_method(method, url, *args, **kwargs)
         logger.info(f"Request ({method.upper()}): {url} [Response <{res.status_code}>];")
         return res
