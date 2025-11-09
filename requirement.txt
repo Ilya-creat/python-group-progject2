@@ -1,2 +1,4 @@
 logging
 dotenv
+pandas
+numpy
