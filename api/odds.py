@@ -9,7 +9,7 @@ import numpy as np
 
 from routes.odds_routes import get_sports, get_odds
 from save_df import save_with_cleanup
-from settings import LIMIT_QUERY_ODDS
+from settings import LIMIT_QUERY_ODDS_V4_SPORTS
 
 LOCAL_DIR = os.path.join(os.path.dirname(__file__), "data/odds-api/")
 os.makedirs(LOCAL_DIR, exist_ok=True)
@@ -79,7 +79,8 @@ def parsing_from_api():
             logger.warning(f"Ошибка при обработке {sport_title}: {str(e)}")
 
     for idx, sport in enumerate(active_sports):
-        if (LIMIT_QUERY_ODDS is not None and idx < LIMIT_QUERY_ODDS) or LIMIT_QUERY_ODDS is None:
+        if ((LIMIT_QUERY_ODDS_V4_SPORTS is not None and idx < LIMIT_QUERY_ODDS_V4_SPORTS) or LIMIT_QUERY_ODDS_V4_SPORTS
+                is None):
             add_odds_data(idx, sport)
             time.sleep(3)
 
@@ -125,5 +126,5 @@ def normalized_df(filename):
 
 
 if __name__ == "__main__":
-    logger.info("Запускаем процесс парсинга и нормализации данных [ODDS]")
+    logger.info("Запускаем процесс извлечения данных из API и их нормализации [ODDS]")
     normalized_df(parsing_from_api())
