@@ -34,14 +34,16 @@ def create_session(base_url: str,
     session.headers.update(headers)
 
     retry = Retry(
-        total=2,
-        backoff_factor=2,
+        total=5,
+        backoff_factor=10,
         status_forcelist=(429, 500, 502, 503, 504),
         allowed_methods=["GET", "POST", "PUT", "DELETE", "PATCH"],
     )
     adapter = HTTPAdapter(max_retries=retry)
 
     session.mount("https://", adapter)
+    session.mount("http://", adapter)
+
     session.verify = use_ssl
 
     session_method = session.request
@@ -56,7 +58,7 @@ def create_session(base_url: str,
 
         logger.debug(f"Request ({method.upper()}) - {url} - {kwargs}")
         res = session_method(method, url, *args, **kwargs)
-        logger.info(f"Request ({method.upper()}): {url} [Response <{res.status_code}>];")
+        logger.info(f"Request ({method.upper()}): {res.url} [Response <{res.status_code}>];")
         return res
 
     session.request = request_
