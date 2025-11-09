@@ -11,7 +11,7 @@ from routes.odds_routes import get_sports, get_odds
 from save_df import save_with_cleanup
 from settings import LIMIT_QUERY_ODDS
 
-LOCAL_DIR = os.path.join(os.path.dirname(__file__), "data/odds/")
+LOCAL_DIR = os.path.join(os.path.dirname(__file__), "data/odds-api/")
 os.makedirs(LOCAL_DIR, exist_ok=True)
 logger = get_logger(__file__)
 
