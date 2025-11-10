@@ -2,3 +2,4 @@ logging
 dotenv
 pandas
 numpy
+ast
