@@ -166,7 +166,7 @@ def resulting_odds(sstats_matches_noodds_cleaned_filename, sstats_matches_all_fi
 
 
 if __name__ == "__main__":
-    sstats_filename, tmp = generate_matches_noodds(update=True)
+    sstats_filename, tmp = generate_matches_noodds()
     df1 = clean_matches_noodds(sstats_filename)
-    df2 = clear_odds_final(generate_odds_final(tmp, update=True))
+    df2 = clear_odds_final(generate_odds_final(tmp))
     resulting_odds(df1, df2)
