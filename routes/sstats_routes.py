@@ -8,6 +8,7 @@ logger = get_logger(__file__)
 URL_ENDPOINT_GAMES_LIST = "/Games/list"
 URL_ENDPOINT_ODDS = "/Odds/{id}"
 
+
 def get_games_list(league_id, year, last):
     response = session.get(URL_ENDPOINT_GAMES_LIST, params={
         "leagueid": league_id,
