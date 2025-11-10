@@ -2,7 +2,6 @@ import glob
 import os
 import shutil
 from datetime import datetime
-import pandas as pd
 
 
 def save_df_with_cleanup(logger, df, path, name, keep_last=5):
@@ -65,7 +64,6 @@ def update_df(logger, df, path, filename, mode='a', header=False):
 
     logger.info(f'DataFrame обновлен: {filename} -> {new_filename}')
     return new_filename
-
 
 
 def get_last_save_filename(logger, path, name):

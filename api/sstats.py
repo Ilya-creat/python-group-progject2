@@ -24,7 +24,7 @@ def generate_matches_noodds(update=False):
 
     if update:
         df_matches_last_name = get_last_save_filename(logger=logger, path=LOCAL_DIR,
-                                                                           name="sstats_matches_noodds")
+                                                      name="sstats_matches_noodds")
         df_matches_noodds = pd.read_csv(LOCAL_DIR + df_matches_last_name,
                                         encoding='utf-8')
         df_matches_noodds = df_matches_noodds[df_matches_noodds['dateUtc'].notna()].reset_index(drop=True)
@@ -46,11 +46,10 @@ def generate_matches_noodds(update=False):
     else:
         logger.info(f"Добавлено: {len(tmp)} лиг")
 
-
     df = pd.concat(tmp, ignore_index=True)
 
     return (save_df_with_cleanup(logger=logger, df=df, path=LOCAL_DIR, name="sstats_matches_noodds") if update is False
-        else update_df(logger=logger, df=df, path=LOCAL_DIR, filename=df_matches_last_name)), tmp
+            else update_df(logger=logger, df=df, path=LOCAL_DIR, filename=df_matches_last_name)), tmp
 
 
 def clean_matches_noodds(sstats_matches_noodds_filename):
