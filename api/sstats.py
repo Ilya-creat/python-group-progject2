@@ -1,15 +1,12 @@
 import ast
-import os
-
 import pandas as pd
 import argparse
 
 from logger.logger import get_logger
 from routes.sstats_routes import get_games_list, get_odds
-from save_df import save_df_with_cleanup, update_df, get_last_save_filename
+from save_df import save_df_with_cleanup, update_df, get_last_save_filename, get_work_dir
 
-LOCAL_DIR = os.path.join(os.path.dirname(__file__), "data/sstats-api/")
-os.makedirs(LOCAL_DIR, exist_ok=True)
+LOCAL_DIR = get_work_dir("api/data/sstats-api/")
 logger = get_logger(__file__)
 
 

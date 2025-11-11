@@ -1,4 +1,3 @@
-import os
 import time
 
 from logger.logger import get_logger
@@ -8,11 +7,10 @@ import pandas as pd
 import numpy as np
 
 from routes.odds_routes import get_sports, get_odds
-from save_df import save_df_with_cleanup
+from save_df import save_df_with_cleanup, get_work_dir
 from settings import LIMIT_QUERY_ODDS_V4_SPORTS
 
-LOCAL_DIR = os.path.join(os.path.dirname(__file__), "data/odds-api/")
-os.makedirs(LOCAL_DIR, exist_ok=True)
+LOCAL_DIR = get_work_dir("api/data/odds-api/")
 logger = get_logger(__file__)
 
 
@@ -46,6 +44,7 @@ def parsing_from_api():
                 home_team = event.get('home_team')
                 away_team = event.get('away_team')
                 commence_time = event.get('commence_time')
+                completed = event.get('completed', False)
 
                 for bookmaker in event.get('bookmakers', []):
                     bookmaker_key = bookmaker.get('key')
@@ -66,6 +65,7 @@ def parsing_from_api():
                                 'event_id': event_id,
                                 'home_team': home_team,
                                 'away_team': away_team,
+                                'completed': completed,
                                 'commence_time': commence_time,
                                 'bookmaker_key': bookmaker_key,
                                 'bookmaker_title': bookmaker_title,
@@ -91,7 +91,7 @@ def parsing_from_api():
 
 
 def normalized_df(filename):
-    logger.info(f"Происходит процесс нормализации данных: {filename}")
+    logger.info(f"Производится процесс нормализации данных: {filename}")
 
     df = pd.read_csv(LOCAL_DIR + filename, encoding='utf-8')
     df.loc[df['market'] == 'h2h', 'point'] = 0
