@@ -84,7 +84,7 @@ def parsing_from_api():
         if ((LIMIT_QUERY_ODDS_V4_SPORTS is not None and idx < LIMIT_QUERY_ODDS_V4_SPORTS) or LIMIT_QUERY_ODDS_V4_SPORTS
                 is None):
             add_odds_data(idx, sport)
-            time.sleep(3)
+            # time.sleep(3)
 
     df = pd.DataFrame(all_data)
     return save_df_with_cleanup(logger=logger, df=df, path=LOCAL_DIR, name="odds_data")
