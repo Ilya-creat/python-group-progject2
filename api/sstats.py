@@ -2,6 +2,7 @@ import ast
 import os
 
 import pandas as pd
+import argparse
 
 from logger.logger import get_logger
 from routes.sstats_routes import get_games_list, get_odds
@@ -166,7 +167,16 @@ def resulting_odds(sstats_matches_noodds_cleaned_filename, sstats_matches_all_fi
 
 
 if __name__ == "__main__":
-    sstats_filename, tmp = generate_matches_noodds()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--update', action='store_true',
+                        help='Режим обновления данных (по умолчанию: полная генерация)')
+    args = parser.parse_args()
+
+    upd = False
+    if args.update is True:
+        upd = True
+
+    sstats_filename, tmp = generate_matches_noodds(update=upd)
     df1 = clean_matches_noodds(sstats_filename)
-    df2 = clear_odds_final(generate_odds_final(tmp))
+    df2 = clear_odds_final(generate_odds_final(tmp, update=upd))
     resulting_odds(df1, df2)
