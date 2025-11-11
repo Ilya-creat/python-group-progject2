@@ -8,7 +8,7 @@ import pandas as pd
 import numpy as np
 
 from routes.odds_routes import get_sports, get_odds
-from save_df import save_with_cleanup
+from save_df import save_df_with_cleanup
 from settings import LIMIT_QUERY_ODDS_V4_SPORTS
 
 LOCAL_DIR = os.path.join(os.path.dirname(__file__), "data/odds-api/")
@@ -17,6 +17,8 @@ logger = get_logger(__file__)
 
 
 def parsing_from_api():
+    logger.info("Производится процесс извлечения данных из API")
+
     all_data = []
     sports = get_sports()
     logger.info(f"Найдено видов спорта: {len(sports)}")
@@ -85,10 +87,12 @@ def parsing_from_api():
             time.sleep(3)
 
     df = pd.DataFrame(all_data)
-    return save_with_cleanup(logger=logger, df=df, path=LOCAL_DIR, name="odds_data")
+    return save_df_with_cleanup(logger=logger, df=df, path=LOCAL_DIR, name="odds_data")
 
 
 def normalized_df(filename):
+    logger.info(f"Происходит процесс нормализации данных: {filename}")
+
     df = pd.read_csv(LOCAL_DIR + filename, encoding='utf-8')
     df.loc[df['market'] == 'h2h', 'point'] = 0
     df.loc[df['market'] == 'h2h_lay', 'point'] = 0
@@ -122,9 +126,8 @@ def normalized_df(filename):
     )
 
     df.loc[df['outcome_name'].str.lower() == 'draw', ['is_favorite', 'is_underdog']] = np.nan
-    save_with_cleanup(logger=logger, df=df, path=LOCAL_DIR, name="odds_data_normal")
+    save_df_with_cleanup(logger=logger, df=df, path=LOCAL_DIR, name="odds_data_normal")
 
 
 if __name__ == "__main__":
-    logger.info("Запускаем процесс извлечения данных из API и их нормализации [ODDS]")
     normalized_df(parsing_from_api())
