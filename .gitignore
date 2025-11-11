@@ -2,6 +2,7 @@
 .env
 
 # Logging
-logger/logs
+logger/logs/
+api/data/
 .idea
 
