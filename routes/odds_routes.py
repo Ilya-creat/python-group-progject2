@@ -7,6 +7,7 @@ logger = get_logger(__file__)
 
 URL_ENDPOINT_SPORTS = "/v4/sports/"
 URL_ENDPOINT_ODDS = "/v4/sports/{sport}/odds/"
+URL_ENDPOINT_SPORTS_SCORES = '/v4/sports/{sport}/scores'
 URL_ENDPOINT_EVENTS_HISTORICAL_ODDS = "/v4/historical/sports/{sport}/odds/"
 
 BOOKMAKERS = 'pinnacle,bet365,williamhill,unibet,bwin,1xbet,betsson,coral,ladbrokes'
@@ -47,10 +48,26 @@ def get_historical_odds_for_datetime(sport_key, date_str):
     }
 
     res = session.get(URL_ENDPOINT_EVENTS_HISTORICAL_ODDS.format(sport=sport_key), params=params)
+    logger.debug(f"Осталось запросов: {res.headers.get('x-requests-remaining', 'N/A')}")
 
     check_api_auth_error(logger, res.status_code)
-
     data = res.json()
     if isinstance(data, dict) and 'data' in data:
         return data['data']
     return data
+
+
+def get_completed_matches(sport_key):
+    params = {
+        'regions': REGIONS,
+        'bookmakers': BOOKMAKERS,
+        'oddsFormat': ODDS_FORMAT
+    }
+
+    res = session.get(URL_ENDPOINT_SPORTS_SCORES.format(sport=sport_key), params=params)
+    logger.debug(f"Осталось запросов: {res.headers.get('x-requests-remaining', 'N/A')}")
+
+    check_api_auth_error(logger, res.status_code)
+    data = res.json()
+    logger.debug(data)
+    return [match for match in data if match.get('completed') == True]

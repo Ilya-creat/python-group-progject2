@@ -44,7 +44,6 @@ def parsing_from_api():
                 home_team = event.get('home_team')
                 away_team = event.get('away_team')
                 commence_time = event.get('commence_time')
-                completed = event.get('completed', False)
 
                 for bookmaker in event.get('bookmakers', []):
                     bookmaker_key = bookmaker.get('key')
@@ -65,7 +64,6 @@ def parsing_from_api():
                                 'event_id': event_id,
                                 'home_team': home_team,
                                 'away_team': away_team,
-                                'completed': completed,
                                 'commence_time': commence_time,
                                 'bookmaker_key': bookmaker_key,
                                 'bookmaker_title': bookmaker_title,
