@@ -68,4 +68,4 @@ def get_completed_matches(sport_key, regions='eu,us,uk', odds_format='decimal',
     check_api_auth_error(logger, res.status_code)
     data = res.json()
     logger.debug(data)
-    return [match for match in data if match.get('completed') == True]
+    return [match for match in data if match.get('completed') is True]
