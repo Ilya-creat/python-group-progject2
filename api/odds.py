@@ -1,6 +1,3 @@
-import os
-import time
-
 from logger.logger import get_logger
 from datetime import datetime
 
@@ -8,11 +5,10 @@ import pandas as pd
 import numpy as np
 
 from routes.odds_routes import get_sports, get_odds
-from save_df import save_df_with_cleanup
+from save_df import save_df_with_cleanup, get_work_dir
 from settings import LIMIT_QUERY_ODDS_V4_SPORTS
 
-LOCAL_DIR = os.path.join(os.path.dirname(__file__), "data/odds-api/")
-os.makedirs(LOCAL_DIR, exist_ok=True)
+LOCAL_DIR = get_work_dir("api/data/odds-api/")
 logger = get_logger(__file__)
 
 
@@ -84,14 +80,14 @@ def parsing_from_api():
         if ((LIMIT_QUERY_ODDS_V4_SPORTS is not None and idx < LIMIT_QUERY_ODDS_V4_SPORTS) or LIMIT_QUERY_ODDS_V4_SPORTS
                 is None):
             add_odds_data(idx, sport)
-            time.sleep(3)
+            # time.sleep(3)
 
     df = pd.DataFrame(all_data)
     return save_df_with_cleanup(logger=logger, df=df, path=LOCAL_DIR, name="odds_data")
 
 
 def normalized_df(filename):
-    logger.info(f"Происходит процесс нормализации данных: {filename}")
+    logger.info(f"Производится процесс нормализации данных: {filename}")
 
     df = pd.read_csv(LOCAL_DIR + filename, encoding='utf-8')
     df.loc[df['market'] == 'h2h', 'point'] = 0

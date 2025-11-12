@@ -1,15 +1,12 @@
 import ast
-import os
-
 import pandas as pd
 import argparse
 
 from logger.logger import get_logger
 from routes.sstats_routes import get_games_list, get_odds
-from save_df import save_df_with_cleanup, update_df, get_last_save_filename
+from save_df import save_df_with_cleanup, update_df, get_last_save_filename, get_work_dir
 
-LOCAL_DIR = os.path.join(os.path.dirname(__file__), "data/sstats-api/")
-os.makedirs(LOCAL_DIR, exist_ok=True)
+LOCAL_DIR = get_work_dir("api/data/sstats-api/")
 logger = get_logger(__file__)
 
 
@@ -26,6 +23,8 @@ def generate_matches_noodds(update=False):
     if update:
         df_matches_last_name = get_last_save_filename(logger=logger, path=LOCAL_DIR,
                                                       name="sstats_matches_noodds")
+        if df_matches_last_name is None:
+            raise FileNotFoundError("Необходимо сгенерировать исходные данные!")
         df_matches_noodds = pd.read_csv(LOCAL_DIR + df_matches_last_name,
                                         encoding='utf-8')
         df_matches_noodds = df_matches_noodds[df_matches_noodds['dateUtc'].notna()].reset_index(drop=True)
@@ -33,7 +32,7 @@ def generate_matches_noodds(update=False):
                              .reset_index(drop=True))
         latest_game_date = df_matches_noodds.loc[0]['date']
 
-    for league_id in range(1, 1207):
+    for league_id in range(1, 3):
         for year in range(max(2024, int(latest_game_date[:4] if latest_game_date is not None else 0)), 2026):
             data = get_games_list(league_id=league_id, year=year, last=latest_game_date)
             try:

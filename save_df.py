@@ -4,6 +4,12 @@ import shutil
 from datetime import datetime
 
 
+def get_work_dir(path):
+    s = os.path.join(os.path.dirname(__file__), path)
+    os.makedirs(s, exist_ok=True)
+    return s
+
+
 def save_df_with_cleanup(logger, df, path, name, keep_last=5):
     """
     Сохраняет DataFrame с меткой времени и удаляет старые версии файлов.
