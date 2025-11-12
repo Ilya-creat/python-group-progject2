@@ -113,12 +113,21 @@ def generate_db():
 
     df = df.dropna(subset=['Team1', 'Team2', 'Outcome', 'Predicted_outcome']).reset_index(drop=True)
     df['League'] = df['League'].fillna('Неизвестная лига')
-    # регулярка, приводит к строке, меняет всё что не цифра на пустую строку regex=True показывает что это регулярка
-    # а не строка обычная .astype(float) приводит в флоат формат
     df['ROI'] = df['ROI'].str.replace(r'[^-0-9.]', '', regex=True).astype(float)
     df['Date'] = pd.to_datetime(df['Date'])
     df = df.drop_duplicates()
     df = df.reset_index(drop=True)
+
+    df['Prediction_Size'] = df.groupby('Name').transform('size')
+    df['Right_Predictions'] = df.groupby('Name')['Outcome'].transform('sum')
+    df = df.sort_values('Prediction_Size').reset_index(drop=True)
+    df['Date'] = pd.to_datetime(df['Date'])
+
+    df['Avg_Predictions_Per_Day'] = df.groupby('Name')['Prediction_Size'].transform(
+        lambda s: s / max((df.loc[s.index, 'Date'].max() - df.loc[s.index, 'Date'].min()).days, 1)
+    )
+
+    df = df.dropna().reset_index(drop=True)
     save_df_with_cleanup(logger=logger, df=df, name="experts_top", path=LOCAL_DIR)
 
 
