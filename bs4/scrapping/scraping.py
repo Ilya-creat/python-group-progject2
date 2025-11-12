@@ -1,14 +1,16 @@
 import os
 import time
-import json
-import requests
-import pandas as pd
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
+from logger.logger import get_logger
+
+LOCAL_DIR = os.path.join(os.path.dirname(__file__), "data/bk-ratings/")
+os.makedirs(LOCAL_DIR, exist_ok=True)
+logger = get_logger(__file__)
 
 top_10_best = {
     1: "https://bookmaker-ratings.ru/author/badostips/",
@@ -49,7 +51,7 @@ top_10_worst = {
     10: "https://bookmaker-ratings.ru/author/kazakov/"
 }
 
-def tojson(data_dict, folder="soups"):
+def to_html(data_dict, folder="soups"):
     driver = webdriver.Chrome()
     wait = WebDriverWait(driver, 45)
     answer = []
@@ -70,35 +72,37 @@ def tojson(data_dict, folder="soups"):
                 break
             show_more = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Смотреть еще']")))
             previous_count = len(driver.find_elements(By.CSS_SELECTOR,
-                                                      ".select-none.text-md.text-blue-400.block.cursor-pointer.rounded-2xl.bg-white.p-3.shadow-gray-300.mb-2"))
+                                                      ".select-none.text-md.text-blue-400.block.cursor-pointer"
+                                                      ".rounded-2xl.bg-white.p-3.shadow-gray-300.mb-2"))
             show_more.click()
             time.sleep(0.2)
             try:
                 wait.until(lambda d: len(
                     d.find_elements(By.CSS_SELECTOR,
-                                    ".select-none.text-md.text-blue-400.block.cursor-pointer.rounded-2xl.bg-white.p-3.shadow-gray-300.mb-2")) > previous_count)
+                                    ".select-none.text-md.text-blue-400.block.cursor-pointer.rounded-2xl.bg-white.p-3"
+                                    ".shadow-gray-300.mb-2")) > previous_count)
             except: #тут ловит ожидание > 60 сек значит прерывает итерацию.
                 break
-            print(f'click {c + 1}')
 
         html_content = driver.page_source
+
         soup = BeautifulSoup(html_content, 'html.parser')
         if not os.path.exists(folder):
-            os.makedirs(folder)
+            os.makedirs(folder, exist_ok=True)
+
         with open(f"{folder}/{folder}_{i}.html", "w", encoding="utf-8") as f:
             f.write(html_content)
-            print(f"Сохранено: {folder}/{folder}_{i}.html")
+            logger.info(f"Сохранено: {folder}/{folder}_{i}.html")
         answer.append(soup)
     driver.quit()
     return answer
 
-def save_soups_to_files(soup_list, folder="soups"):
-    if not os.path.exists(folder):
-        os.makedirs(folder)
 
-all_soups_best = tojson(top_10_best, folder="temp_best")
-save_soups_to_files(all_soups_best, folder="best")
-all_soups_worst = tojson(top_10_worst, folder="temp_worst")
-save_soups_to_files(all_soups_worst, folder="worst")
-all_soups_average = tojson(top_10_average, folder="temp_average")
-save_soups_to_files(all_soups_average, folder="average")
+def parser():
+    to_html(top_10_best, folder=LOCAL_DIR + "temp_best")
+    to_html(top_10_worst, folder=LOCAL_DIR + "temp_worst")
+    to_html(top_10_average, folder=LOCAL_DIR + "temp_average")
+
+
+if __name__ == "__main__":
+    parser()
