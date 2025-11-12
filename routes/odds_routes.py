@@ -10,11 +10,6 @@ URL_ENDPOINT_ODDS = "/v4/sports/{sport}/odds/"
 URL_ENDPOINT_SPORTS_SCORES = '/v4/sports/{sport}/scores'
 URL_ENDPOINT_EVENTS_HISTORICAL_ODDS = "/v4/historical/sports/{sport}/odds/"
 
-BOOKMAKERS = 'pinnacle,bet365,williamhill,unibet,bwin,1xbet,betsson,coral,ladbrokes'
-MARKETS = 'h2h,spreads,totals'
-REGIONS = 'eu,us,uk'
-ODDS_FORMAT = 'decimal'
-
 
 def get_sports():
     res = session.get(URL_ENDPOINT_SPORTS)
@@ -37,12 +32,14 @@ def get_odds(sport_key, regions='us,uk,eu,au', markets='h2h,spreads,totals', odd
     return res.json()
 
 
-def get_historical_odds_for_datetime(sport_key, date_str):
+def get_historical_odds_for_datetime(sport_key, date_str, regions='eu,us,uk', markets='h2h,spreads,totals',
+                                     odds_format='decimal',
+                                     bk='pinnacle,bet365,williamhill,unibet,bwin,1xbet,betsson,coral,ladbrokes'):
     params = {
-        'regions': REGIONS,
-        'markets': MARKETS,
-        'oddsFormat': ODDS_FORMAT,
-        'bookmakers': BOOKMAKERS,
+        'regions': regions,
+        'markets': markets,
+        'oddsFormat': odds_format,
+        'bookmakers': bk,
         'date': date_str,
         'dateFormat': 'iso'
     }
@@ -57,11 +54,12 @@ def get_historical_odds_for_datetime(sport_key, date_str):
     return data
 
 
-def get_completed_matches(sport_key):
+def get_completed_matches(sport_key, regions='eu,us,uk', odds_format='decimal',
+                          bk='pinnacle,bet365,williamhill,unibet,bwin,1xbet,betsson,coral,ladbrokes'):
     params = {
-        'regions': REGIONS,
-        'bookmakers': BOOKMAKERS,
-        'oddsFormat': ODDS_FORMAT
+        'regions': regions,
+        'bookmakers': bk,
+        'oddsFormat': odds_format
     }
 
     res = session.get(URL_ENDPOINT_SPORTS_SCORES.format(sport=sport_key), params=params)

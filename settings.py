@@ -8,7 +8,7 @@ logging_set_level = os.getenv("LOGGER_LEVEL", "20")
 ODDS_API_KEY = os.getenv("ODDS_API_KEY")
 SSTATS_API_KEY = os.getenv("SSTATS_API_KEY")
 
-LIMIT_QUERY_ODDS_V4_SPORTS = 50
+LIMIT_QUERY_ODDS_V4_SPORTS = None
 SLEEP_BETWEEN_CALLS = 0.5
 TIME_SNAPSHOTS = [
     {'hours_before': 24, 'label': '24h_before'},
