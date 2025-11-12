@@ -4,3 +4,4 @@ pandas
 numpy
 ast
 bs4
+selenium
