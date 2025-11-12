@@ -33,13 +33,15 @@ def create_dataset_from_html(html_doc, place):
     place_in_top = place
 
     for predict in soup.find_all("a",
-                                 class_="select-none text-md text-blue-400 block cursor-pointer rounded-2xl bg-white p-3 shadow-gray-300 mb-2"):
+                                 class_="select-none text-md text-blue-400 block cursor-pointer rounded-2xl bg-white "
+                                        "p-3 shadow-gray-300 mb-2"):
         check = predict.find("use", href="/static/sprite-group/sport-types.svg#football")
         if not check:
             continue
 
         parent_pred_block = predict.select_one(
-            "div.flex.w-full.items-center.justify-between.rounded-xl.bg-gray-80.py-2.pl-3.pr-2.m-lg\\:mt-3.d-lg\\:ml-3.d-lg\\:mt-0"
+            "div.flex.w-full.items-center.justify-between.rounded-xl.bg-gray-80.py-2.pl-3.pr-2"
+            ".m-lg\\:mt-3.d-lg\\:ml-3.d-lg\\:mt-0"
         )
         predicted_outcome = None
         if parent_pred_block:

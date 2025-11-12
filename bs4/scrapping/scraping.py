@@ -1,3 +1,5 @@
+# flake8: noqa: E722
+
 import os
 import time
 from bs4 import BeautifulSoup
@@ -51,6 +53,7 @@ top_10_worst = {
     10: "https://bookmaker-ratings.ru/author/kazakov/"
 }
 
+
 def to_html(data_dict, folder="soups"):
     driver = webdriver.Chrome()
     wait = WebDriverWait(driver, 45)
@@ -62,7 +65,7 @@ def to_html(data_dict, folder="soups"):
             ended_predicts_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR,
                                                                            ".whitespace-nowrap.pr-2.pr-4")))
             ended_predicts_button.click()
-        except:  # тут ловит ожидание > 60 сек значит прерывает итерацию если не может нажать кнопку
+        except:   # тут ловит ожидание > 60 сек значит прерывает итерацию если не может нажать кнопку
             continue
 
         c = 0
@@ -81,7 +84,7 @@ def to_html(data_dict, folder="soups"):
                     d.find_elements(By.CSS_SELECTOR,
                                     ".select-none.text-md.text-blue-400.block.cursor-pointer.rounded-2xl.bg-white.p-3"
                                     ".shadow-gray-300.mb-2")) > previous_count)
-            except: #тут ловит ожидание > 60 сек значит прерывает итерацию.
+            except:  # тут ловит ожидание > 60 сек значит прерывает итерацию.
                 break
 
         html_content = driver.page_source
