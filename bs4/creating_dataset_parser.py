@@ -4,15 +4,14 @@ import pandas as pd
 from bs4 import BeautifulSoup
 
 from logger.logger import get_logger
-from save_df import save_df_with_cleanup
+from save_df import save_df_with_cleanup, get_work_dir
 
 df = pd.DataFrame(columns=[
     "Name", "ROI", "Place_in_top", "Predicted_outcome",
     "Coefficient", "Outcome", "Team1", "Team2", "League", "Date",
 ])
 
-LOCAL_DIR = os.path.join(os.path.dirname(__file__), "data/bk-ratings/")
-os.makedirs(LOCAL_DIR, exist_ok=True)
+LOCAL_DIR = get_work_dir("data/bk-ratings/")
 logger = get_logger(__file__)
 
 

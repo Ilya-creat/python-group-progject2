@@ -9,9 +9,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 from logger.logger import get_logger
+from save_df import get_work_dir
 
-LOCAL_DIR = os.path.join(os.path.dirname(__file__), "data/bk-ratings/")
-os.makedirs(LOCAL_DIR, exist_ok=True)
+LOCAL_DIR = get_work_dir("data/bk-ratings/")
+
 logger = get_logger(__file__)
 
 top_10_best = {
