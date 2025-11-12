@@ -11,6 +11,7 @@ from settings import TIME_SNAPSHOTS, ADDITIONAL_SPORTS_COUNT, SLEEP_BETWEEN_CALL
 LOCAL_DIR = get_work_dir("api/data/odds-api/")
 logger = get_logger(__file__)
 
+
 def get_historical_odds(odds_events, target_matches, time_label):
     rows = []
     matched_events = 0
@@ -70,9 +71,9 @@ def process_historical_odds():
 
     already_processed = set()
     if 'sport_key' in existing_odds_df.columns:
-      already_collected_sports = set(existing_odds_df['sport_key'].unique())
+        already_collected_sports = set(existing_odds_df['sport_key'].unique())
     else:
-      already_collected_sports = set()
+        already_collected_sports = set()
 
     if 'snapshot_time' not in existing_odds_df.columns:
         existing_odds_df['snapshot_time'] = 'default'
@@ -82,8 +83,8 @@ def process_historical_odds():
     ).dt.strftime('%Y-%m-%d')
 
     for i, row in existing_odds_df.iterrows():
-      key = f"{row['sport_key']}_{row['temp_date']}_{row['snapshot_time']}"
-      already_processed.add(key)
+        key = f"{row['sport_key']}_{row['temp_date']}_{row['snapshot_time']}"
+        already_processed.add(key)
 
     completed_matches = []
 
@@ -104,7 +105,6 @@ def process_historical_odds():
     target_matches = [match for match in completed_matches if match['sport_key'] in target_sports]
     target_matches_df = pd.DataFrame(target_matches)
     target_matches_df['commence_dt'] = pd.to_datetime(target_matches_df['commence_time'])
-
 
     requests_to_make = []
     for i, match in target_matches.iterrows():
@@ -159,7 +159,7 @@ def process_historical_odds():
             if odds_events:
                 sport_matches = matches_by_sport.get(sport_key)
                 if sport_matches is not None:
-                    odds_rows, _matched =  get_historical_odds(odds_events, sport_matches, time_label)
+                    odds_rows, _matched = get_historical_odds(odds_events, sport_matches, time_label)
                     if odds_rows:
                         new_odds_data.extend(odds_rows)
         except Exception as e:

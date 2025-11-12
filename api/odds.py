@@ -1,5 +1,3 @@
-import time
-
 from logger.logger import get_logger
 from datetime import datetime
 
