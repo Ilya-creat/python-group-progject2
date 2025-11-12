@@ -113,8 +113,6 @@ def generate_db():
 
     df = df.dropna(subset=['Team1', 'Team2', 'Outcome', 'Predicted_outcome']).reset_index(drop=True)
     df['League'] = df['League'].fillna('Неизвестная лига')
-    # регулярка, приводит к строке, меняет всё что не цифра на пустую строку regex=True показывает что это регулярка
-    # а не строка обычная .astype(float) приводит в флоат формат
     df['ROI'] = df['ROI'].str.replace(r'[^-0-9.]', '', regex=True).astype(float)
     df['Date'] = pd.to_datetime(df['Date'])
     df = df.drop_duplicates()
